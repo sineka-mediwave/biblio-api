@@ -1,12 +1,13 @@
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4, validate } = require("uuid");
 const isValidISBN = require("./validation");
+const { ratingSchema } = require("./validations/rating.schema");
 
 const bookId = uuidv4();
-const rating = [
+const ratings = [
   {
     id: uuidv4(),
     ratng: 5,
-    books: bookId,
+    bookId: bookId,
   },
 ];
 const books = [
@@ -22,8 +23,10 @@ const books = [
   },
 ];
 
+//get all books in the api
 const getAllBooks = () => books;
 
+//Adding new book
 const addBook = ({ title, isbn }) => {
   const bookId = uuidv4();
   if (isValidISBN(isbn)) {
@@ -37,7 +40,21 @@ const addBook = ({ title, isbn }) => {
   } else console.log("Invalid ");
 };
 
+//add rating for the book
+const addRating = ({ rating, bookId }) => {
+  const rateId = uuidv4();
+
+  const bookRating = {
+    rateId,
+    rating,
+    bookId,
+  };
+  ratings.push(bookRating);
+  return bookRating;
+};
+
 module.exports = {
   getAllBooks,
   addBook,
+  addRating,
 };
