@@ -25,3 +25,8 @@
 ## get/books
 
 - get the array of objects with id, title and isbn.
+
+## post/books
+
+- adding movie with title and isbn with validaton for isbn-10
+- error handler for the next(arg)
