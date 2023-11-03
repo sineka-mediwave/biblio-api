@@ -21,3 +21,7 @@
 
 7.  creating port in .env
     .env is created in the main folder and it must be included in the .gitignore file.
+
+## get/books
+
+- get the array of objects with id, title and isbn.

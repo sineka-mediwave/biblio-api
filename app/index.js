@@ -5,23 +5,30 @@ const config = require("./config");
 const express = require("express");
 const morgan = require("morgan");
 
+const { v4: uuidv4 } = require("uuid");
 const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
 
+const bookId = uuidv4();
 const rating = [
   {
-    id: "b1",
+    id: uuidv4(),
     ratng: 5,
-    books: 1, //how to implete that uuid here
+    books: bookId,
   },
 ];
 const books = [
   {
-    id: 1, // anna, here we will use the uuid
+    id: uuidv4(),
     title: "Storywallah",
-    rating: rating,
+    isbn: "0143445774",
+  },
+  {
+    id: uuidv4(),
+    title: "The Gold Crew",
+    isbn: "0446512028",
   },
 ];
 
