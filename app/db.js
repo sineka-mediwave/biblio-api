@@ -53,8 +53,21 @@ const addRating = ({ rating, bookId }) => {
   return bookRating;
 };
 
+//get a single book with rating
+const getBook = ({ id }) => {
+  const idx = books.findIndex((b) => b.id == id);
+  if (idx === -1) {
+    return null;
+  }
+  const bookRating = ratings.filter((r) => r.bookId === id);
+  console.log(bookRating);
+  const book = books[idx];
+  return book;
+};
+
 module.exports = {
   getAllBooks,
   addBook,
   addRating,
+  getBook,
 };

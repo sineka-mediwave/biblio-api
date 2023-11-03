@@ -6,8 +6,7 @@ const express = require("express");
 const morgan = require("morgan");
 
 const Joi = require("joi");
-const { getAllBooks, addBook, addRating } = require("./db");
-const { errorHandler } = require("./middlewares/errorhandler.middleware");
+const { getAllBooks, addBook, addRating, getBook } = require("./db");
 
 const app = express();
 
@@ -49,6 +48,18 @@ app.post("/books/:id/rating", (req, res) => {
     bookId: req.params.id,
   });
   return res.json(rating);
+});
+
+//READ - to get one book
+app.get("/books/:id", (req, res, next) => {
+  const book = getBook({ id: req.params.id });
+  if (!book) {
+    return next({
+      status: 400,
+      message: "Book not found",
+    });
+  }
+  res.send(book);
 });
 
 //errorHandler
