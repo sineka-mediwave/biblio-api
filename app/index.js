@@ -12,6 +12,9 @@ const {
   addRating,
   getBook,
   updateBookTitle,
+  deleteBook,
+  updateRating,
+  deleteRating,
 } = require("./db");
 
 const app = express();
@@ -78,6 +81,58 @@ app.put("/books/:id", (req, res, next) => {
     });
   }
   res.send(book);
+});
+
+//DELETE - book
+app.delete("/books/:id", (req, res, next) => {
+  const book = deleteBook({ id: req.params.id });
+  if (!book) {
+    return next({
+      status: 400,
+      message: "book not found",
+    });
+  }
+  res.send(book);
+});
+
+//updating rating
+app.put("/books/:id/rating", (req, res, next) => {
+  const ratingSchema = Joi.object({
+    rating: Joi.number().min(0).max(5).required(),
+  });
+
+  const { value, error } = ratingSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({
+      message: error.details.map((d) => d.message),
+    });
+  }
+
+  const rating = updateRating({
+    rating: req.body.rating,
+    bookId: req.params.id,
+  });
+
+  if (!rating) {
+    return next({
+      status: 400,
+      message: "no rating found for the book",
+    });
+  }
+  return res.json(rating);
+});
+
+//
+//DELETE -rating
+app.delete("/rating/:id", (req, res, next) => {
+  const rate = deleteRating({ id: req.params.id });
+  if (!rate) {
+    return next({
+      status: 400,
+      message: "rating not found",
+    });
+  }
+  res.send(rate);
 });
 
 //errorHandler

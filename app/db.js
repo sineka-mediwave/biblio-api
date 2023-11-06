@@ -20,10 +20,10 @@ const getAllBooks = () => books;
 
 //Adding new book
 const addBook = ({ title, isbn }) => {
-  const bookId = uuidv4();
+  const id = uuidv4();
   if (isValidISBN(isbn)) {
     const book = {
-      bookId,
+      id,
       title,
       isbn,
     };
@@ -35,7 +35,7 @@ const addBook = ({ title, isbn }) => {
 //add rating for the book
 const addRating = ({ rating, bookId }) => {
   const rateId = uuidv4();
-  const ratingIdx = ratings.findIndex((r) => r.bookId === id);
+  const ratingIdx = ratings.findIndex((r) => r.bookId == id);
   if (ratingIdx != -1) return null;
   const bookRating = {
     rateId,
@@ -53,13 +53,13 @@ const getBook = ({ id }) => {
     return null;
   }
   const book = books[idx];
-  const ratingIdx = ratings.findIndex((r) => r.bookId === id);
+  const ratingIdx = ratings.findIndex((r) => r.bookId == id);
   if (ratingIdx === -1) {
-    let singleBook = { ...book, ratings: 0 };
+    let singleBook = { ...book, rating: 0 };
     return singleBook;
   } else {
     const rate = ratings[ratingIdx].rating;
-    let singleBook = { ...book, ratings: rate };
+    let singleBook = { ...book, rating: rate };
     return singleBook;
   }
 };
@@ -75,10 +75,45 @@ const updateBookTitle = ({ id, title }) => {
   return books[idx];
 };
 
+//deleting the movie
+const deleteBook = ({ id }) => {
+  const idx = books.findIndex((m) => m.id == id);
+  if (idx === -1) {
+    return null;
+  }
+  const book = books[idx];
+  books.splice(idx, 1);
+  return book;
+};
+
+//updating single book with rating
+const updateRating = ({ bookId, rating }) => {
+  const idx = ratings.findIndex((r) => r.bookId == bookId);
+  if (idx == -1) {
+    return null;
+  }
+
+  rating && (ratings[idx]["rating"] = rating);
+  return ratings[idx];
+};
+
+//Deleting the rating
+const deleteRating = ({ id }) => {
+  const idx = ratings.findIndex((r) => r.rateId == id);
+  if (idx == -1) return null;
+  const deleteRate = ratings[idx];
+  ratings.splice(idx, 1);
+  console.log(deleteRate);
+  return deleteRate;
+};
+
 module.exports = {
   getAllBooks,
   addBook,
   addRating,
   getBook,
   updateBookTitle,
+  deleteBook,
+  updateRating,
+  deleteRating,
 };
