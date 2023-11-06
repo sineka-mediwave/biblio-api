@@ -1,23 +1,15 @@
-const { v4: uuidv4, validate } = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 const isValidISBN = require("./validation");
-const { ratingSchema } = require("./validations/rating.schema");
 
-const bookId = uuidv4();
-const ratings = [
-  {
-    id: uuidv4(),
-    ratng: 5,
-    bookId: bookId,
-  },
-];
+const ratings = [];
 const books = [
   {
-    id: uuidv4(),
+    id: 1234,
     title: "Storywallah",
     isbn: "0143445774",
   },
   {
-    id: uuidv4(),
+    id: 5678,
     title: "The Gold Crew",
     isbn: "0446512028",
   },
@@ -43,7 +35,8 @@ const addBook = ({ title, isbn }) => {
 //add rating for the book
 const addRating = ({ rating, bookId }) => {
   const rateId = uuidv4();
-
+  const ratingIdx = ratings.findIndex((r) => r.bookId === id);
+  if (ratingIdx != -1) return null;
   const bookRating = {
     rateId,
     rating,
@@ -59,10 +52,16 @@ const getBook = ({ id }) => {
   if (idx === -1) {
     return null;
   }
-  const bookRating = ratings.filter((r) => r.bookId === id);
-  console.log(bookRating);
   const book = books[idx];
-  return book;
+  const ratingIdx = ratings.findIndex((r) => r.bookId === id);
+  if (ratingIdx === -1) {
+    let singleBook = { ...book, ratings: 0 };
+    return singleBook;
+  } else {
+    const rate = ratings[ratingIdx].rating;
+    let singleBook = { ...book, ratings: rate };
+    return singleBook;
+  }
 };
 
 module.exports = {
