@@ -96,14 +96,22 @@ const updateRating = ({ bookId, rating }) => {
   rating && (ratings[idx]["rating"] = rating);
   return ratings[idx];
 };
-
+//read rating with corresponding book
+const getRating = ({ id }) => {
+  const idx = ratings.findIndex((r) => r.rateId == id);
+  if (idx == -1) return null;
+  const rate = ratings[idx];
+  const bookId = ratings[idx]["bookId"];
+  const bookIdx = books.findIndex((b) => b.id == bookId);
+  let ratedBook = { ...rate, bookId: books[bookIdx] };
+  return ratedBook;
+};
 //Deleting the rating
 const deleteRating = ({ id }) => {
   const idx = ratings.findIndex((r) => r.rateId == id);
   if (idx == -1) return null;
   const deleteRate = ratings[idx];
   ratings.splice(idx, 1);
-  console.log(deleteRate);
   return deleteRate;
 };
 
@@ -116,4 +124,5 @@ module.exports = {
   deleteBook,
   updateRating,
   deleteRating,
+  getRating,
 };
