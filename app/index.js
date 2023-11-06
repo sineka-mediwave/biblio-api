@@ -6,7 +6,13 @@ const express = require("express");
 const morgan = require("morgan");
 
 const Joi = require("joi");
-const { getAllBooks, addBook, addRating, getBook } = require("./db");
+const {
+  getAllBooks,
+  addBook,
+  addRating,
+  getBook,
+  updateBookTitle,
+} = require("./db");
 
 const app = express();
 
@@ -57,6 +63,18 @@ app.get("/books/:id", (req, res, next) => {
     return next({
       status: 400,
       message: "Book not found",
+    });
+  }
+  res.send(book);
+});
+
+//Update - the book title
+app.put("/books/:id", (req, res, next) => {
+  const book = updateBookTitle({ id: req.params.id, title: req.body.title });
+  if (!book) {
+    return next({
+      status: 400,
+      message: "book not found",
     });
   }
   res.send(book);

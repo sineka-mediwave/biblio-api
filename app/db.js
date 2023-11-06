@@ -64,9 +64,21 @@ const getBook = ({ id }) => {
   }
 };
 
+//updating book title
+const updateBookTitle = ({ id, title }) => {
+  const idx = books.findIndex((b) => b.id == id);
+  if (idx == -1) {
+    return null;
+  }
+
+  title && (books[idx]["title"] = title);
+  return books[idx];
+};
+
 module.exports = {
   getAllBooks,
   addBook,
   addRating,
   getBook,
+  updateBookTitle,
 };
