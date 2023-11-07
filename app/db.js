@@ -8,11 +8,6 @@ const books = [
     title: "Storywallah",
     isbn: "0143445774",
   },
-  {
-    id: 5678,
-    title: "The Gold Crew",
-    isbn: "0446512028",
-  },
 ];
 
 //get all books in the api
@@ -29,18 +24,18 @@ const addBook = ({ title, isbn }) => {
     };
     books.push(book);
     return book;
-  } else console.log("Invalid ");
+  } else return null;
 };
 
 //add rating for the book
 const addRating = ({ rating, bookId }) => {
   const rateId = uuidv4();
-  const ratingIdx = ratings.findIndex((r) => r.bookId == id);
+  const ratingIdx = ratings.findIndex((r) => r.book == bookId);
   if (ratingIdx != -1) return null;
   const bookRating = {
     rateId,
     rating,
-    bookId,
+    book: bookId,
   };
   ratings.push(bookRating);
   return bookRating;
@@ -53,7 +48,7 @@ const getBook = ({ id }) => {
     return null;
   }
   const book = books[idx];
-  const ratingIdx = ratings.findIndex((r) => r.bookId == id);
+  const ratingIdx = ratings.findIndex((r) => r.book == id);
   if (ratingIdx === -1) {
     let singleBook = { ...book, rating: 0 };
     return singleBook;
@@ -77,7 +72,7 @@ const updateBookTitle = ({ id, title }) => {
 
 //deleting the movie
 const deleteBook = ({ id }) => {
-  const idx = books.findIndex((m) => m.id == id);
+  const idx = books.findIndex((b) => b.id == id);
   if (idx === -1) {
     return null;
   }
@@ -88,7 +83,7 @@ const deleteBook = ({ id }) => {
 
 //updating single book with rating
 const updateRating = ({ bookId, rating }) => {
-  const idx = ratings.findIndex((r) => r.bookId == bookId);
+  const idx = ratings.findIndex((r) => r.book == bookId);
   if (idx == -1) {
     return null;
   }
@@ -101,9 +96,9 @@ const getRating = ({ id }) => {
   const idx = ratings.findIndex((r) => r.rateId == id);
   if (idx == -1) return null;
   const rate = ratings[idx];
-  const bookId = ratings[idx]["bookId"];
+  const bookId = ratings[idx]["book"];
   const bookIdx = books.findIndex((b) => b.id == bookId);
-  let ratedBook = { ...rate, bookId: books[bookIdx] };
+  let ratedBook = { ...rate, book: books[bookIdx] };
   return ratedBook;
 };
 //Deleting the rating
@@ -123,6 +118,6 @@ module.exports = {
   updateBookTitle,
   deleteBook,
   updateRating,
-  deleteRating,
   getRating,
+  deleteRating,
 };

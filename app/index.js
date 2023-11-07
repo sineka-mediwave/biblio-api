@@ -37,11 +37,14 @@ app.post("/books", (req, res, next) => {
     title: req.body.title,
     isbn: req.body.isbn,
   });
+  if (!book) {
+    next({ code: 400, message: "invalid isbn" });
+  }
   return res.json(book);
 });
 
 //CREATE rating
-app.post("/books/:id/rating", (req, res) => {
+app.post("/books/:id/rating", (req, res, next) => {
   const ratingSchema = Joi.object({
     rating: Joi.number().min(0).max(5).required(),
   });
@@ -57,6 +60,12 @@ app.post("/books/:id/rating", (req, res) => {
     rating: req.body.rating,
     bookId: req.params.id,
   });
+  if (!rating) {
+    return next({
+      status: 400,
+      message: "rating is added already",
+    });
+  }
   return res.json(rating);
 });
 
