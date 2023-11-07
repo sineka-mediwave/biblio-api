@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
-const isValidISBN = require("./validation");
+// const isValidISBN = require("./validation");
 
 const ratings = [];
 const books = [
@@ -16,19 +16,20 @@ const getAllBooks = () => books;
 //Adding new book
 const addBook = ({ title, isbn }) => {
   const id = uuidv4();
-  if (isValidISBN(isbn)) {
-    const book = {
-      id,
-      title,
-      isbn,
-    };
-    books.push(book);
-    return book;
-  } else return null;
+  // if (isValidISBN(isbn)) {
+  const book = {
+    id,
+    title,
+    isbn,
+  };
+  books.push(book);
+  return book;
+  // } else return null;
 };
 
 //add rating for the book
-const addRating = ({ rating, bookId }) => {
+const addRating = ({ rating }, bookId) => {
+  console.log(rating, bookId);
   const rateId = uuidv4();
   const ratingIdx = ratings.findIndex((r) => r.book == bookId);
   if (ratingIdx != -1) return null;
@@ -101,6 +102,7 @@ const getRating = ({ id }) => {
   let ratedBook = { ...rate, book: books[bookIdx] };
   return ratedBook;
 };
+
 //Deleting the rating
 const deleteRating = ({ id }) => {
   const idx = ratings.findIndex((r) => r.rateId == id);
