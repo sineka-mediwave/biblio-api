@@ -59,3 +59,7 @@ rating: 4,
 ```
 
 by default rating should be 0.
+
+## Validation
+
+- [isbn validation](https://stackoverflow.com/questions/58425499/how-to-add-custom-validator-function-in-joi)

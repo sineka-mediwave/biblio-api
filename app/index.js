@@ -16,6 +16,7 @@ const {
   updateRating,
   deleteRating,
   getRating,
+  searchBook,
 } = require("./db");
 
 const { validate } = require("./middlewares/validate.middleware");
@@ -29,14 +30,14 @@ app.use(morgan("dev"));
 
 //READ
 app.get("/books", (req, res) => {
-  res.send(getAllBooks());
+  const books = getAllBooks();
+  const searchedBook = searchBook(req.query.search);
+  if (searchedBook) return res.json(searchedBook);
+  res.send(books);
 });
 
 //CREATE
 app.post("/books", validate(bookSchema), (req, res, next) => {
-  // if (!req.body.title || !req.body.isbn) {
-  //   return next({ code: 400, message: "book should have title and isbn" });
-  // }
   const book = addBook({
     title: req.body.title,
     isbn: req.body.isbn,
@@ -49,17 +50,6 @@ app.post("/books", validate(bookSchema), (req, res, next) => {
 
 //CREATE rating
 app.post("/books/:id/rating", validate(ratingSchema), (req, res, next) => {
-  // const ratingSchema = Joi.object({
-  //   rating: Joi.number().min(0).max(5).required(),
-  // });
-
-  // const { value, error } = ratingSchema.validate(req.body);
-  // if (error) {
-  //   return res.status(400).json({
-  //     message: error.details.map((d) => d.message),
-  //   });
-  // }
-
   const rating = addRating(req.xop.rating, req.params.id);
 
   if (!rating) {
@@ -109,21 +99,7 @@ app.delete("/books/:id", (req, res, next) => {
 
 //update rating
 app.put("/books/:id/rating", validate(ratingSchema), (req, res, next) => {
-  // const ratingSchema = Joi.object({
-  //   rating: Joi.number().min(0).max(5).required(),
-  // });
-
-  // const { value, error } = ratingSchema.validate(req.body);
-  // if (error) {
-  //   return res.status(400).json({
-  //     message: error.details.map((d) => d.message),
-  //   });
-  // }
-
-  const rating = updateRating({
-    rating: req.body.rating,
-    bookId: req.params.id,
-  });
+  const rating = updateRating(req.xop.rating, req.params.id);
 
   if (!rating) {
     return next({

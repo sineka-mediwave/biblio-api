@@ -12,6 +12,14 @@ const books = [
 //get all books in the api
 const getAllBooks = () => books;
 
+const searchBook = (term) => {
+  if (term) {
+    const searchedTerm = books.filter((b) =>
+      b.title.toLowerCase().includes(term.toLowerCase())
+    );
+    return searchedTerm;
+  }
+};
 //Adding new book
 const addBook = ({ title, isbn }) => {
   const id = uuidv4();
@@ -25,7 +33,7 @@ const addBook = ({ title, isbn }) => {
 };
 
 //add rating for the book
-const addRating = ({ rating }, bookId) => {
+const addRating = (rating, bookId) => {
   console.log(rating, bookId);
   const rateId = uuidv4();
   const ratingIdx = ratings.findIndex((r) => r.book == bookId);
@@ -80,7 +88,7 @@ const deleteBook = ({ id }) => {
 };
 
 //updating single book with rating
-const updateRating = ({ bookId, rating }) => {
+const updateRating = (rating, bookId) => {
   const idx = ratings.findIndex((r) => r.book == bookId);
   if (idx == -1) {
     return null;
@@ -119,4 +127,5 @@ module.exports = {
   updateRating,
   getRating,
   deleteRating,
+  searchBook,
 };
