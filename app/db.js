@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require("uuid");
-// const isValidISBN = require("./validation");
 
 const ratings = [];
 const books = [
@@ -16,7 +15,6 @@ const getAllBooks = () => books;
 //Adding new book
 const addBook = ({ title, isbn }) => {
   const id = uuidv4();
-  // if (isValidISBN(isbn)) {
   const book = {
     id,
     title,
@@ -24,7 +22,6 @@ const addBook = ({ title, isbn }) => {
   };
   books.push(book);
   return book;
-  // } else return null;
 };
 
 //add rating for the book
